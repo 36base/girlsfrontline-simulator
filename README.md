@@ -16,7 +16,7 @@
 * 전체 버프 스킬
 * 일부 죽창류 스킬
 
-현재 작업 상황은 [여기에서](https://trello.com/b/KmID8JpE) 확인할 수 있습니다
+현재 작업 상황은 [여기에서](https://trello.com/b/KmID8JpE) 확인하실 수 있습니다
 
 ## Install
 
