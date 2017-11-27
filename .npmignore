@@ -1,1 +1,5 @@
 src
+
+.gitattributes
+.editorconfig
+.babelrc
