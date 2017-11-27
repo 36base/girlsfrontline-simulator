@@ -1,0 +1,25 @@
+{
+  "name": "girlsfrontline-simulator",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/DDBase/girlsfrontline-simulator.git",
+  "description": "GirlsFrontline combat simulator",
+  "author": "DDBase Community",
+  "license": "LGPL-3.0",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
+    "babel-preset-stage-1": "^6.24.1",
+    "eslint": "^4.12.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jest": "^21.2.1"
+  },
+  "scripts": {
+    "build": "babel src --presets=stage-1 --out-dir dist"
+  }
+}
