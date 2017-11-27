@@ -28,6 +28,7 @@
 ## [Simulator](#Simulator)
   * [new Simulator(options)](#Simulator_constructor)
   * [frameStart](#Simulator_frameStart)
+  * [frameEnd](#Simulator_frameEnd)
   * [statCalculate](#Simulator_statCalculate)
 
 <a name="doll"></a>
@@ -297,12 +298,23 @@ const simul = new Simulator({
 
 <a name="Simulator_frameStart"></a>
 ### [frameStart](#main)
-프레임이 시작되었을때 작동됩니다.
+프레임이 시작되었을 때 호출됩니다.
 
 #### Usage
 ```javascript
 Simulator.on('frameStart', () => {
   console.log('프레임이 시작되었습니다!')
+})
+```
+
+<a name="Simulator_frameEnd"></a>
+### [frameEnd](#main)
+프레임이 종료되었을 때 호출됩니다. 모든 계산이 종료된 상태이므로 제대 전체를 컨트롤 할 때 유용합니다.
+
+#### Usage
+```javascript
+Simulator.on('frameEnd', () => {
+  console.log('프레임이 종료되었습니다!')
 })
 ```
 
