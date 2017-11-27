@@ -28,7 +28,7 @@
 ## [Simulator](#Simulator)
   * [new Simulator(options)](#Simulator_constructor)
   * [frameStart](#Simulator_frameStart)
-  * [frameEnd](#Simulator_frameEnd)
+  * [frameEnd](#Simulator_frameEnd)
   * [statCalculate](#Simulator_statCalculate)
 
 <a name="doll"></a>
