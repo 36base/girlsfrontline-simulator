@@ -1,0 +1,26 @@
+{
+  "0": {
+    "dumylink": "1",
+    "posX": "7",
+    "posY": "4",
+    "data": {
+      "name": "Drone (HP: 30000)",
+      "code": "Drone (HP: 30000)",
+      "maxlife": "30000",
+      "pow": "0",
+      "hit": "0",
+      "dodge": "0",
+      "range": "0",
+      "speed": "0",
+      "number": "1",
+      "angle": "180",
+      "armor_piercing": "0",
+      "armor": "0",
+      "shield": "0",
+      "rate": "0",
+      "boss_hp": "0",
+      "debuff_resistance": "0"
+    }
+  },
+  "name": "테스트용 드론"
+}
