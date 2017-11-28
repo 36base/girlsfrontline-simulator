@@ -20,7 +20,7 @@ export function activeSniping (doll, target, simulator, delay) {
 
       doll['nextAtkFrame'] = simulator['currentFrame'] + getAtkInterval(doll, rate)
 
-      makeDamage(simulator['currentFrame'], doll, target, skillDmg)
+      makeDamage(simulator, doll, target, skillDmg)
     }
   })
 }

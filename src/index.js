@@ -38,7 +38,7 @@ class Simulator extends EventEmitter {
 
   start () {
     // FIXME: 프레임 제한이 아닌, 적이나 아군 제대 둘 중 하나가 전멸할 때 까지가 목표
-    for (this.currentFrame = 1; this.currentFrame <= 627; this.currentFrame++) {
+    for (this.currentFrame = 1; this.currentFrame <= 900; this.currentFrame++) {
     // for (this.currentFrame = 1; this.currentFrame <= 3600; this.currentFrame++) {
       this.emit('frameStart')
       this.dolls
@@ -46,12 +46,6 @@ class Simulator extends EventEmitter {
         .forEach((doll) => calculate(doll, this))
       this.emit('frameEnd')
     }
-    return this.dolls
-      .filter((doll) => doll['team'] === 'friendly')
-      .map((item) => ({
-        name: item['dollData']['codeName'],
-        values: item['frameData']
-      }))
   }
 }
 
