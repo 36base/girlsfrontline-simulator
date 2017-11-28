@@ -10,10 +10,10 @@ export function calculate (doll, simulator) {
   doll['currentTarget'] = getNormalTarget(doll, simulator)
 
   if (doll['currentTarget']) {
-    if (doll['team'] === 'friendly') {
-      normalAttack(doll, simulator)
-    }
-    // normalAttack(doll, simulator)
+    // if (doll['team'] === 'friendly') {
+    //   normalAttack(doll, simulator)
+    // }
+    normalAttack(doll, simulator)
   }
 
   // 그래프에서는 1 ~ 900프레임까지 900개의 데이터를 요구하기 때문에
