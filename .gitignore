@@ -11,6 +11,11 @@
 
 /dist
 
+/data/origin
+
+h.js
+hapi.js
+
 # misc
 .DS_Store
 .env.local

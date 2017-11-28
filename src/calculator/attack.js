@@ -105,8 +105,6 @@ export function normalAttack (doll, simulator) {
     makeDamage(currentFrame, doll, target, frameDmg)
 
     doll['nextAtkFrame'] = currentFrame + getAtkInterval(doll, rate, bullet)
-
-    return frameDmg
   }
 }
 
