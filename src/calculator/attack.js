@@ -110,21 +110,26 @@ export function normalAttack (doll, simulator) {
   }
 }
 
-export function makeDamage (frame, doll, target, damage) {
+export function makeDamage (frame, doll, target, damage, linkProtection = true) {
   const {dollData, frameData} = doll
   const {dollData: targetData} = target
 
+  let finalDamage = damage
+
   if (damage > 0) {
-    target['hp'] -= damage
-    console.log(`${frame}프레임, 캐릭터 ${dollData['codeName']}가 타겟 ${targetData['codeName']}을(를) 공격하여 ${damage}데미지를 입힘 (남은 체력: ${target['hp']})`)
+    if (linkProtection && finalDamage > targetData['stats']['hp']) {
+      finalDamage = targetData['stats']['hp']
+    }
+    target['hp'] -= finalDamage
+    console.log(`${frame}프레임, 캐릭터 ${dollData['codeName']}가 타겟 ${targetData['codeName']}을(를) 공격하여 ${finalDamage}데미지를 입힘 (남은 체력: ${target['hp']})`)
 
     // 오버딜 구현
     if (target['hp'] < 0) {
-      damage += target['hp']
+      finalDamage += target['hp']
     }
   } else {
     console.log(`${frame}프레임, 캐릭터 ${dollData['codeName']}가 타겟 ${targetData['codeName']}을(를) 공격했으나 빗나갔습니다! (남은 체력: ${target['hp']})`)
   }
 
-  damageLog(frameData, frame, damage)
+  damageLog(frameData, frame, finalDamage)
 }
