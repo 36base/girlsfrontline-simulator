@@ -40,10 +40,6 @@ class Simulator extends EventEmitter {
     // FIXME: 프레임 제한이 아닌, 적이나 아군 제대 둘 중 하나가 전멸할 때 까지가 목표
     for (this.currentFrame = 1; this.currentFrame <= 627; this.currentFrame++) {
     // for (this.currentFrame = 1; this.currentFrame <= 3600; this.currentFrame++) {
-      /**
-      * 새 프레임이 시작되었을때 작동됩니다.
-      * @event Simulator#frameStart
-      */
       this.emit('frameStart')
       this.dolls
         .filter((doll) => doll['hp'] > 0)
