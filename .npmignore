@@ -3,3 +3,5 @@ src
 .gitattributes
 .editorconfig
 .babelrc
+.eslintrc
+.travis.yml
