@@ -1,7 +1,7 @@
 # girlsfrontline-simulator
 
-[![Build Status](https://travis-ci.org/preco21/hitomo.svg?branch=master)](https://travis-ci.org/preco21/hitomo)
-[![Dependency Status](https://dependencyci.com/github/preco21/hitomo/badge)](https://dependencyci.com/github/preco21/hitomo)
+[![Build Status](https://travis-ci.org/DDBase/girlsfrontline-simulator.svg?branch=master)](https://travis-ci.org/DDBase/girlsfrontline-simulator)
+[![Dependency Status](https://dependencyci.com/github/DDBase/girlsfrontline-simulator/badge)](https://dependencyci.com/github/DDBase/girlsfrontline-simulator)
 
 > 소녀전선 전투 시뮬레이터
 
