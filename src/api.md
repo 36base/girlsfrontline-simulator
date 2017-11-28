@@ -12,7 +12,6 @@
   * [currentDummy](#doll_currentDummy)
   * [currentTarget](#doll_currentTarget)
   * [nextAtkFrame](#doll_nextAtkFrame)
-  * [frameData](#doll_frameData)
   * [frameEvent](#doll_frameEvent)
   * [dollData](#doll_dollData)
     * [codeName](#dollData_codeName)
@@ -29,6 +28,7 @@
   * [new Simulator(options)](#Simulator_constructor)
   * [frameStart](#Simulator_frameStart)
   * [frameEnd](#Simulator_frameEnd)
+  * [onDamage](#Simulator_onDamage)
   * [statCalculate](#Simulator_statCalculate)
 
 <a name="doll"></a>
@@ -109,10 +109,6 @@ if (currentTarget) {
 <a name="doll_nextAtkFrame"></a>
 ### [nextAtkFrame](#main) ⇒ <code>Number</code>
 해당 인형이 다음에 공격할 프레임을 나타냅니다.
-
-<a name="doll_frameData"></a>
-### [frameData](#main) ⇒ <code>Array</code>
-해당 인형의 프레임별 로그를 나타냅니다.
 
 <a name="doll_frameEvent"></a>
 ### [frameEvent](#main) => <code>Array(Object)</code>
@@ -315,6 +311,27 @@ Simulator.on('frameStart', () => {
 ```javascript
 Simulator.on('frameEnd', () => {
   console.log('프레임이 종료되었습니다!')
+})
+```
+
+<a name="Simulator_onDamage"></a>
+### [onDamage](#main)
+데미지 연산이 일어날 때 호출됩니다.
+
+| Key | Value Type | Description |
+| --- | --- | --- |
+| doll | [doll](#doll) | 공격자 |
+| target | [doll](#doll) | 피격자 |
+| frame | Number | 현재 프레임 |
+| damage | Number | 데미지 |
+
+#### Usage
+```javascript
+Simulator.on('onDamage', (doll, target, frame, damage) => {
+  const {dollData} = doll
+  const {dollData: targetData} = target
+
+  console.log(`${dollData['codeName']}이(가) ${targetData['codeName']}에게 ${damage} 데미지를 줬습니다.`)
 })
 ```
 

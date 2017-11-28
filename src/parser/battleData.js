@@ -19,9 +19,6 @@ export default function getBattleData (dollData, team) {
     // 특정 프레임에 호출되는 함수가 저장됩니다.
     // Ex) 3초 후 저격 등
     frameEvent: [],
-    // 프레임마다 저장되는 정보
-    // Ex) 스탯, 데미지 등
-    frameData: [],
     getDistance: function (posX, posY = 0) {
       return this.company === 'GRIFON'
         // 그리폰 인형일 경우 x좌표로 계산
