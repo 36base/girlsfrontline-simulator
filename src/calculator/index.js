@@ -3,7 +3,6 @@ import {normalAttack} from './attack'
 import {registerEquips} from './equips'
 import {registerEffect} from './effect'
 import {registerSkill} from './skill'
-import {damageLog} from './logger'
 import {getBattleStat} from './battleStat'
 
 export function calculate (doll, simulator) {
@@ -18,7 +17,7 @@ export function calculate (doll, simulator) {
 
   // 그래프에서는 1 ~ 900프레임까지 900개의 데이터를 요구하기 때문에
   // 0 데미지를 준 것으로 기록해서 데이터를 갱신하기 위함임
-  damageLog(doll['frameData'], simulator['currentFrame'], 0)
+  simulator.emit('onDamage', doll, 0, simulator['currentFrame'], 0)
 
   simulator.once('frameEnd', () => {
     // 프레임 종료 시 유효 타겟이 없으면 제대(유닛) 이동

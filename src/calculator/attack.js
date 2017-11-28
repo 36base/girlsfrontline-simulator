@@ -1,5 +1,4 @@
 import {getBattleStat} from './battleStat'
-import {damageLog} from './logger'
 
 export function getAtkInterval (doll, rate, bullet) {
   const {dollData} = doll
@@ -102,17 +101,20 @@ export function normalAttack (doll, simulator) {
 
     frameDmg = Math.floor(frameDmg)
 
-    makeDamage(currentFrame, doll, target, frameDmg)
+    makeDamage(simulator, doll, target, frameDmg)
 
     doll['nextAtkFrame'] = currentFrame + getAtkInterval(doll, rate, bullet)
   }
 }
 
-export function makeDamage (frame, doll, target, damage, linkProtection = true) {
-  const {dollData, frameData} = doll
+export function makeDamage (simulator, doll, target, damage, linkProtection = true) {
+  const {currentFrame: frame} = simulator
+  const {dollData} = doll
   const {dollData: targetData} = target
 
   let finalDamage = damage
+
+  simulator.emit('onDamage', doll, target, frame, finalDamage)
 
   if (damage > 0) {
     if (linkProtection && finalDamage > targetData['stats']['hp']) {
@@ -128,6 +130,4 @@ export function makeDamage (frame, doll, target, damage, linkProtection = true) 
   } else {
     console.log(`${frame}프레임, 캐릭터 ${dollData['codeName']}가 타겟 ${targetData['codeName']}을(를) 공격했으나 빗나갔습니다! (남은 체력: ${target['hp']})`)
   }
-
-  damageLog(frameData, frame, finalDamage)
 }
