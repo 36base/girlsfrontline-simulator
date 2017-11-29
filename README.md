@@ -21,7 +21,7 @@
 ## Install
 
 ```bash
-$ git clone https://github.com/DDBase/girlsfrontline-simulator.git
+$ git clone https://github.com/CirnoV/girlsfrontline-simulator.git
 $ cd girlsfrontline-simulator
 $ yarn
 ```
