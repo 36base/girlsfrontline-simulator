@@ -1,5 +1,6 @@
 # girlsfrontline-simulator
 
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Build Status](https://travis-ci.org/DDBase/girlsfrontline-simulator.svg?branch=master)](https://travis-ci.org/DDBase/girlsfrontline-simulator)
 [![Dependency Status](https://dependencyci.com/github/DDBase/girlsfrontline-simulator/badge)](https://dependencyci.com/github/DDBase/girlsfrontline-simulator)
 
@@ -21,7 +22,7 @@
 ## Install
 
 ```bash
-$ git clone https://github.com/DDBase/girlsfrontline-simulator.git
+$ git clone https://github.com/CirnoV/girlsfrontline-simulator.git
 $ cd girlsfrontline-simulator
 $ yarn
 ```
@@ -46,7 +47,7 @@ $ yarn test
 ```
 
 ## License
-[LGPL-3.0](./LICENSE)
+[CC-BY-NC-SA](./LICENSE)
 
 ## API
 [API 문서](./src/api.md)
