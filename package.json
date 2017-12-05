@@ -2,8 +2,8 @@
   "name": "girlsfrontline-simulator",
   "version": "0.2.0",
   "main": "./dist/index.js",
-  "repository": "https://github.com/DDBase/girlsfrontline-simulator.git",
-  "description": "GirlsFrontline combat simulator",
+  "repository": "https://github.com/CirnoV/girlsfrontline-simulator.git",
+  "description": "GirlsFrontline Combat Simulator API",
   "author": "DDBase Community",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
