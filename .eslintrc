@@ -1,3 +1,5 @@
 extends: prev
 env:
   jest: true
+rules:
+  no-param-reassign: 0
