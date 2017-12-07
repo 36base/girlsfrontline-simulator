@@ -1,14 +1,14 @@
-import getStat from './stat'
-import SimulateSlot from '../../data/SimulateSlot.json'
+import SimulateSlot from '../../data/SimulateSlot.json';
 // import SimulateEnemy from '../../data/SimulateEnemy.json'
+import getStat from './stat';
 
 describe('`getStat()`', () => {
   test('returns stat', () => {
-    const stat = getStat(SimulateSlot[1]['doll']['status'])
-    const emptyStat = getStat()
+    const stat = getStat(SimulateSlot[1].doll.status);
+    const emptyStat = getStat();
 
     expect(stat).toMatchObject(
-      { armor: 0,
+      {armor: 0,
         dodge: 50,
         hit: 50,
         hp: 105,
@@ -22,10 +22,10 @@ describe('`getStat()`', () => {
         armorPiercing: 0,
         nightView: 0,
         coolDown: 0,
-        bullet: 0 }
-    )
+        bullet: 0},
+    );
     expect(emptyStat).toMatchObject(
-      { armor: 0,
+      {armor: 0,
         dodge: 0,
         hit: 0,
         hp: 0,
@@ -39,7 +39,7 @@ describe('`getStat()`', () => {
         armorPiercing: 0,
         nightView: 0,
         coolDown: 0,
-        bullet: 0 }
-    )
-  })
-})
+        bullet: 0},
+    );
+  });
+});

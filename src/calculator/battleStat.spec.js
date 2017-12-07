@@ -1,15 +1,15 @@
-import Simulator from '../index'
-import {getBattleStat} from './battleStat'
-import SimulateSlot from '../../data/SimulateSlot.json'
-import SimulateEnemy from '../../data/SimulateEnemy.json'
+import Simulator from '../index';
+import SimulateSlot from '../../data/SimulateSlot.json';
+import SimulateEnemy from '../../data/SimulateEnemy.json';
+import {getBattleStat} from './battleStat';
 
 describe('`getBattleStat()`', () => {
   test('returns battleStat', () => {
-    const simulate = new Simulator()
+    const simulate = new Simulator();
 
-    simulate.init(SimulateSlot, SimulateEnemy)
+    simulate.init(SimulateSlot, SimulateEnemy);
 
-    const battleStat = getBattleStat(simulate.dolls[0], simulate)
+    const battleStat = getBattleStat(simulate.dolls[0], simulate);
 
     expect(battleStat).toMatchObject({
       armor: 0,
@@ -26,7 +26,7 @@ describe('`getBattleStat()`', () => {
       armorPiercing: 10,
       nightView: 0,
       coolDown: 100,
-      bullet: 0
-    })
-  })
-})
+      bullet: 0,
+    });
+  });
+});

@@ -1,10 +1,10 @@
-import getEquips from './equips'
-import SimulateSlot from '../../data/SimulateSlot.json'
+import SimulateSlot from '../../data/SimulateSlot.json';
 // import SimulateEnemy from '../../data/SimulateEnemy.json'
+import getEquips from './equips';
 
 describe('`getEffect()`', () => {
   test('returns equips', () => {
-    const equips = getEquips(SimulateSlot[1]['setting'])
+    const equips = getEquips(SimulateSlot[1].setting);
 
     expect(equips[2]).toMatchObject({
       name: '.300BLK고속탄',
@@ -24,8 +24,8 @@ describe('`getEffect()`', () => {
         armorPiercing: 0,
         nightView: 0,
         coolDown: 0,
-        bullet: 0
-      }
-    })
-  })
-})
+        bullet: 0,
+      },
+    });
+  });
+});

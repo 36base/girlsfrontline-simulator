@@ -1,11 +1,11 @@
-import getDoll from './doll'
-import SimulateSlot from '../../data/SimulateSlot.json'
-import SimulateEnemy from '../../data/SimulateEnemy.json'
+import SimulateSlot from '../../data/SimulateSlot.json';
+import SimulateEnemy from '../../data/SimulateEnemy.json';
+import getDoll from './doll';
 
 describe('`getDoll()`', () => {
   test('returns doll', () => {
-    const doll = getDoll(SimulateSlot[1], 'friendly', 1)
-    const enemy = getDoll(SimulateEnemy[0], 'enemy')
+    const doll = getDoll(SimulateSlot[1], 'friendly', 1);
+    const enemy = getDoll(SimulateEnemy[0], 'enemy');
 
     expect(doll).toMatchObject({
       dollData: {
@@ -14,9 +14,9 @@ describe('`getDoll()`', () => {
         dummyLink: 5,
         gunType: 4,
         posX: -2,
-        posY: 8
-      }
-    })
+        posY: 8,
+      },
+    });
 
     expect(enemy).toMatchObject({
       dollData: {
@@ -25,8 +25,8 @@ describe('`getDoll()`', () => {
         dummyLink: 1,
         gunType: 3,
         posX: 16,
-        posY: 0
-      }
-    })
-  })
-})
+        posY: 0,
+      },
+    });
+  });
+});
