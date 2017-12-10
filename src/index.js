@@ -1,40 +1,47 @@
+// import {combineReducers} from 'redux';
+// import undoable from 'redux-undo';
+// import {createAction, handleAction, handleActions} from 'redux-actions';
 import EventEmitter from 'eventemitter3';
-import getDoll from './parser/doll';
-import {calculate, registerEvents} from './calculator';
+import {calculate} from './calculator';
+import reducers from './redux/reducers';
+import {updateOptions, updateDolls} from './redux/simulator';
+// import {calculate, registerEvents} from './calculator';
 
 class Simulator extends EventEmitter {
-  constructor(options) {
+  constructor() {
     super();
-    this.dolls = [];
-    this.currentFrame = 0;
-    this.options = {
-      night: false,
-      realMode: false,
+
+    this.initialState = {
+      simulator: {
+        frame: 0,
+        dolls: [],
+      },
+      options: {
+        night: false,
+        realMode: false,
+      },
     };
 
-    if (typeof options === 'object') {
-      Object.keys(options).forEach((key) => {
-        this.options[key] = options[key];
-      });
-    }
+    this.reducers = reducers;
+    this.store = {};
   }
 
-  init(slot, enemy) {
-    const enemies = Object
-      .keys(enemy)
-      // 적 제대 이름 제외 Ex) "name": "0-2철혈 제226제대 구성"
-      .filter((key) => key !== 'name')
-      .map((key) => getDoll(enemy[key], 'enemy'));
+  get dolls() {
+    const state = this.store.getState();
+    const {simulator: {present: {simulator: {dolls}}}} = state;
 
-    // 배열 인덱스로 버프 진형을 설정해야 하기 때문에 먼저 파싱한 뒤 필터링 하는 방식을 사용.
-    const friendly = slot
-      .map((item, index) => item ? getDoll(item, 'friendly', index) : undefined)
-      .filter((item) => item !== undefined);
+    return dolls;
+  }
 
-    // friendly와 enemies를 통합
-    this.dolls = [...friendly, ...enemies];
-    this.dolls.forEach((doll) => registerEvents(doll, this));
-    this.currentFrame = 0;
+  // TODO: 댕댕베이스 데이터 의존성 제거
+  init(dolls, options) {
+    const {store: {dispatch}} = this;
+
+    dispatch(updateOptions(options));
+    dispatch(updateDolls(dolls));
+
+    // TODO
+    // this.dolls.forEach((doll) => registerEvents(doll, this));
   }
 
   start() {
