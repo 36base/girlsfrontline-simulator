@@ -1,9 +1,10 @@
+import deepEqual from 'deep-equal';
 import getStat from '../parser/stat';
-import {updateDoll} from '../redux/simulator';
+import {updateBattleStat} from '../redux/simulator';
 
 export function getBattleStat(simulator, dollIndex) {
   const doll = simulator.getDoll(dollIndex);
-  const {dollData: {gunType, stats: baseStats}} = doll;
+  const {dollData: {gunType, stats: baseStats}, battleStats} = doll;
   const stats = {...baseStats};
 
   // stat파서에 인수를 넣지 않으면 기본값(0)으로 반환됨
@@ -65,7 +66,9 @@ export function getBattleStat(simulator, dollIndex) {
     }
   });
 
-  simulator.dispatch(updateDoll(dollIndex, {battleStats: stats}));
+  if (deepEqual(stats, battleStats) === false) {
+    simulator.dispatch(updateBattleStat(dollIndex, {...stats}));
+  }
 }
 
 export default getBattleStat;

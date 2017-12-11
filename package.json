@@ -7,6 +7,7 @@
   "author": "DDBase Community",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
+    "deep-equal": "^1.0.1",
     "eventemitter3": "^2.0.3",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
