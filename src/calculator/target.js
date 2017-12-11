@@ -1,15 +1,19 @@
-export function getNormalTarget(doll, simulator, customGunType) {
+import {updateTarget} from '../redux/simulator';
+
+export function getNormalTarget(simulator, dollIndex, customGunType) {
+  const doll = simulator.getDoll(dollIndex);
   const {dolls} = simulator;
-  const {currentTarget, dollData, company} = doll;
+  const {targetIndex, dollData, company} = doll;
+  const currentTarget = simulator.getDoll(targetIndex);
   const gunType = customGunType || dollData.gunType;
 
-  const range = getRange(doll, simulator);
+  const range = getRange(simulator, dollIndex);
 
   // 타겟이 살아있고, 사거리 안에 있을때는 따로 타겟을 구하지 않는다.
   if (currentTarget && currentTarget.hp > 0 &&
     doll.getDistance(currentTarget.posX, currentTarget.posY) <= range
   ) {
-    return currentTarget;
+    return;
   }
 
   // 철혈 인형일 경우 타겟팅 범위는 사거리 - 1이 됨.
@@ -17,36 +21,36 @@ export function getNormalTarget(doll, simulator, customGunType) {
     ? range - 1
     : range;
 
-  const enemies = dolls
-    .filter((enemy) => enemy.team !== doll.team)
-    .filter((enemy) => enemy.hp > 0)
+  const enemies = Object.keys(dolls)
+    .filter((key) => dolls[key].team !== doll.team)
+    .filter((key) => dolls[key].hp > 0)
     // 사거리 안의 적을 필터링
-    .filter((enemy) =>
-      // if (company === 'SANGVIS FERRI') {
-      //   console.log(doll.getDistance(enemy['posX'], enemy['posY']))
-      // }
-      doll.getDistance(enemy.posX, enemy.posY) <= targetRange)
+    .filter((key) => doll.getDistance(dolls[key].posX, dolls[key].posY) <= targetRange)
     // 거리 순서로 오름차순 정렬
-    .sort((a, b) => doll.getDistance(a.posX, a.posY) - doll.getDistance(b.posX, b.posY));
+    .sort((a, b) => doll.getDistance(dolls[a].posX, dolls[a].posY) - doll.getDistance(dolls[b].posX, dolls[b].posY));
 
-  // 철혈 소속이거나 AR일 때 가장 가까운 적 반환
-  if (company === 'SANGVIS FERRI' || gunType === 2) {
-    return enemies[0];
-  // RF일 때 가장 먼 적 반환
-  } else if (gunType === 3) {
-    return enemies[enemies.length - 1];
+  if (enemies.length > 0) {
+    // 철혈 소속이거나 AR일 때 가장 가까운 적
+    if (company === 'SANGVIS FERRI' || gunType === 2) {
+      simulator.dispatch(updateTarget(dollIndex, {targetIndex: enemies[0]}));
+    // RF일 때 가장 먼 적
+    } else if (gunType === 3) {
+      simulator.dispatch(updateTarget(dollIndex, {targetIndex: enemies[enemies.length - 1]}));
+    } else {
+      // 기타 다른 인형일 경우 랜덤 타겟
+      simulator.dispatch(updateTarget(dollIndex, {targetIndex: enemies[Math.floor(Math.random() * enemies.length)]}));
+    }
   }
-
-  // 기타 다른 인형일 경우 랜덤 타겟 반환
-  return enemies[Math.floor(Math.random() * enemies.length)];
 }
 
-export function getRange(doll, simulator) {
+export function getRange(simulator, dollIndex) {
   const {dolls} = simulator;
-  const {dollData, company} = doll;
+  const {dollData, company, team} = simulator.getDoll(dollIndex);
 
   if (company === 'GRIFON') {
-    const friendly = dolls.filter((item) => item.team === doll.team);
+    const friendly = Object.keys(dolls)
+      .filter((key) => dolls[key].team === team)
+      .map((key) => dolls[key]);
 
     // 1열에 있으면 -(-2) + 7 = 9
     // 2열에 있으면 -(0) + 7 = 7

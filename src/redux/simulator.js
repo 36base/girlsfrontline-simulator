@@ -1,40 +1,64 @@
-import {createAction, handleActions, handleAction} from 'redux-actions';
+import {createAction, handleActions, handleAction, combineActions} from 'redux-actions';
 
-const UPDATE_FRAME = 'simulator.frame';
-const UPDATE_OPTIONS = 'simulator.options';
-const UPDATE_DOLLS = 'simulator.dolls';
-const UPDATE_DOLL = 'simulator.dolls[key]';
+const FRAME_START = 'FRAME_START';
+const OPTIONS_INIT = 'OPTIONS_INIT';
+const DOLLS_INIT = 'DOLLS_INIT';
+const TARGET_CHANGED = 'TARGET_CHANGED';
+const BATTLESTAT_UPDATED = 'BATTLESTAT_UPDATED';
+const COOLDOWN_INIT = 'COOLDOWN_INIT';
+const SKILL_ACTIVE = 'SKILL_ACTIVE';
 
-export const updateFrame = createAction(UPDATE_FRAME, (frame) => frame);
-export const updateDoll = createAction(UPDATE_DOLL, (key, doll) => ({
-  key,
-  doll,
+const DOLL_ACTIONS = [
+  TARGET_CHANGED,
+  BATTLESTAT_UPDATED,
+  COOLDOWN_INIT,
+  SKILL_ACTIVE,
+];
+
+export const startFrame = createAction(FRAME_START, (frame) => frame);
+export const updateTarget = createAction(TARGET_CHANGED, (index, targetIndex) => ({
+  index,
+  doll: {...targetIndex},
+}));
+export const updateBattleStat = createAction(BATTLESTAT_UPDATED, (index, battleStats) => ({
+  index,
+  doll: {battleStats: {...battleStats}},
+}));
+export const initCoolDown = createAction(COOLDOWN_INIT, (index, nextActiveFrame) => ({
+  index,
+  doll: {nextActiveFrame},
+}));
+export const updateSkill = createAction(SKILL_ACTIVE, (index, {nextActiveFrame, activeFrame}) => ({
+  index,
+  doll: {nextActiveFrame, activeFrame},
 }));
 
-export const updateDolls = createAction(UPDATE_DOLLS, (dolls) => dolls);
-export const updateOptions = createAction(UPDATE_OPTIONS, (options) => options);
+export const initDolls = createAction(DOLLS_INIT, (dolls) => dolls);
+export const initOptions = createAction(OPTIONS_INIT, (options) => options);
 
 export const simulatorReducer = handleActions({
-  [UPDATE_FRAME](state, {payload: frame}) {
+  [FRAME_START](state, {payload: frame}) {
     return {
       ...state,
       frame,
     };
   },
-  [UPDATE_DOLL](state, {payload: {key, doll}}) {
-    const {dolls} = state;
+  [combineActions(...DOLL_ACTIONS)](state, {payload: {index, doll}}) {
+    const {dolls} = {...state};
 
-    dolls[key] = {
-      ...dolls[key],
+    dolls[index] = {
+      ...dolls[index],
       ...doll,
     };
 
     return {
       ...state,
-      dolls,
+      dolls: {
+        ...dolls,
+      },
     };
   },
-  [UPDATE_DOLLS](state, {payload: dolls}) {
+  [DOLLS_INIT](state, {payload: dolls}) {
     return {
       ...state,
       dolls,
@@ -45,7 +69,7 @@ export const simulatorReducer = handleActions({
   dolls: {},
 });
 
-export const optionReducer = handleAction([UPDATE_OPTIONS], (state, {payload: options}) => {
+export const optionReducer = handleAction([OPTIONS_INIT], (state, {payload: options}) => {
   const currentOptions = {...state};
 
   if (typeof options === 'object') {

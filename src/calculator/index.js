@@ -1,4 +1,4 @@
-// import {getNormalTarget} from './target';
+import {getNormalTarget} from './target';
 // import {normalAttack} from './attack';
 import {registerEquips} from './equips';
 import {registerEffect} from './effect';
@@ -8,7 +8,7 @@ import {getBattleStat} from './battleStat';
 export function calculate(simulator, dollIndex) {
   getBattleStat(simulator, dollIndex);
 
-  // getNormalTarget(simulator, dollIndex);
+  getNormalTarget(simulator, dollIndex);
 
   // if (doll.currentTarget) {
   //   // if (doll['team'] === 'friendly') {

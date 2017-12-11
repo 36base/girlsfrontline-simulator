@@ -1,13 +1,11 @@
-import {updateDoll} from '../redux/simulator';
+import {initCoolDown, updateSkill} from '../redux/simulator';
 // import {activeSniping} from './skills';
 // import {getNormalTarget} from './target';
 
 export function registerSkill(simulator, dollIndex) {
   const {dollData: {skill: {activeTime: initActiveTime}}} = simulator.getDoll(dollIndex);
 
-  simulator.dispatch(updateDoll(dollIndex, {
-    nextActiveFrame: initActiveTime,
-  }));
+  simulator.dispatch(initCoolDown(dollIndex, initActiveTime));
 
   // frameEvent에 등록된 액티브 스킬 처리
   simulator.on('frameStart', () => {
@@ -42,12 +40,12 @@ export function registerSkill(simulator, dollIndex) {
 
         // 패시브 처리
         if (startCoolDown <= 0) {
-          simulator.dispatch(updateDoll(dollIndex, {
+          simulator.dispatch(updateSkill(dollIndex, {
             nextActiveFrame: 999999,
             activeFrame: 999999,
           }));
         } else {
-          simulator.dispatch(updateDoll(dollIndex, {
+          simulator.dispatch(updateSkill(dollIndex, {
             nextActiveFrame: currentFrame + (coolDown * (1 + (coolDownMul / 100))),
             activeFrame: currentFrame + (duration || 0),
           }));

@@ -4,7 +4,7 @@
 import EventEmitter from 'eventemitter3';
 // import {calculate} from './calculator';
 import reducers from './redux/reducers';
-import {updateFrame, updateDolls, updateOptions} from './redux/simulator';
+import {startFrame, initDolls, initOptions} from './redux/simulator';
 import {calculate, registerEvents} from './calculator';
 
 class Simulator extends EventEmitter {
@@ -60,10 +60,15 @@ class Simulator extends EventEmitter {
 
   // TODO: 댕댕베이스 데이터 의존성 제거
   init(dolls, options) {
+    // index must not be '0' because targetIndex defaults to 0.
+    if (Object.keys(dolls).some((index) => index === '0')) {
+      throw new Error('Index must not be \'0\'');
+    }
+
     const {store: {dispatch}} = this;
 
-    dispatch(updateOptions(options));
-    dispatch(updateDolls(dolls));
+    dispatch(initOptions(options));
+    dispatch(initDolls(dolls));
 
     this.removeAllListeners();
 
@@ -71,20 +76,8 @@ class Simulator extends EventEmitter {
       .forEach((key) => registerEvents(this, key));
   }
 
-  start() {
-    // FIXME: 프레임 제한이 아닌, 적이나 아군 제대 둘 중 하나가 전멸할 때 까지가 목표
-    for (this.currentFrame = 1; this.currentFrame <= 900; this.currentFrame++) {
-    // for (this.currentFrame = 1; this.currentFrame <= 3600; this.currentFrame++) {
-      this.emit('frameStart');
-      Object.keys(this.dolls)
-        .filter((key) => this.dolls[key].hp > 0)
-        .forEach((key) => calculate(this, key));
-      // this.emit('frameEnd');
-    }
-  }
-
   next() {
-    this.store.dispatch(updateFrame(this.currentFrame + 1));
+    this.dispatch(startFrame(this.currentFrame + 1));
     this.emit('frameStart');
     Object.keys(this.dolls)
       .filter((key) => this.dolls[key].hp > 0)

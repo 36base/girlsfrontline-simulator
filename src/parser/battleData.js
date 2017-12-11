@@ -10,8 +10,7 @@ export default function getBattleData(dollData, team) {
     get currentDummy() {
       return Math.ceil(this.hp / dollData.stats.hp);
     },
-    // 현재 타겟 (doll 오브젝트)
-    currentTarget: {},
+    targetIndex: 0,
     nextAtkFrame: 0,
     nextActiveFrame: 0,
     activeFrame: 0,
