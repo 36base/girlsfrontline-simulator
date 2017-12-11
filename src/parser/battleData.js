@@ -13,6 +13,8 @@ export default function getBattleData(dollData, team) {
     // 현재 타겟 (doll 오브젝트)
     currentTarget: {},
     nextAtkFrame: 0,
+    nextActiveFrame: 0,
+    activeFrame: 0,
     // 남은 탄환
     currentBullet: 0,
     // 특정 프레임에 호출되는 함수가 저장됩니다.

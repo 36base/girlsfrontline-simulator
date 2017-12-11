@@ -1,6 +1,10 @@
 import getStat from '../parser/stat';
 
-export function getBattleStat(doll, simulator) {
+export function getBattleStat(simulator, dollIndex) {
+  const doll = simulator.getDoll(dollIndex);
+  const {dollData: {gunType, stats: baseStats}} = doll;
+  const stats = {...baseStats};
+
   // stat파서에 인수를 넣지 않으면 기본값(0)으로 반환됨
   const addStats = {
     add: getStat(),
@@ -21,10 +25,6 @@ export function getBattleStat(doll, simulator) {
   * @prop {Object} addStats 해당 인형의 스탯 증가량
   */
   simulator.emit('statCalculate', doll, addStats);
-
-  const {dollData} = doll;
-  const {gunType} = dollData;
-  const stats = {...dollData.stats};
 
   Object.keys(stats).forEach((keys) => {
     if (keys === 'coolDown') {

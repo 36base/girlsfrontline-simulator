@@ -2,10 +2,11 @@
 // import undoable from 'redux-undo';
 // import {createAction, handleAction, handleActions} from 'redux-actions';
 import EventEmitter from 'eventemitter3';
-import {calculate} from './calculator';
+// import {calculate} from './calculator';
 import reducers from './redux/reducers';
-import {updateOptions, updateDolls} from './redux/simulator';
-// import {calculate, registerEvents} from './calculator';
+import {updateFrame, updateOptions} from './redux/simulator';
+import {updateDolls} from './redux/doll';
+import {calculate, registerEvents} from './calculator';
 
 class Simulator extends EventEmitter {
   constructor() {
@@ -14,8 +15,8 @@ class Simulator extends EventEmitter {
     this.initialState = {
       simulator: {
         frame: 0,
-        dolls: [],
       },
+      dolls: {},
       options: {
         night: false,
         realMode: false,
@@ -26,12 +27,36 @@ class Simulator extends EventEmitter {
     this.store = {};
   }
 
-  get dolls() {
+  dispatch = (action) => {
+    this.store.dispatch(action);
+  };
+
+  get present() {
     const state = this.store.getState();
-    const {simulator: {present: {simulator: {dolls}}}} = state;
+    const {simulator: {present}} = state;
+
+    return present;
+  }
+
+  get currentFrame() {
+    const {present: {simulator: {frame}}} = this;
+
+    return frame;
+  }
+
+  get options() {
+    const {present: {options}} = this;
+
+    return options;
+  }
+
+  get dolls() {
+    const {present: {dolls}} = this;
 
     return dolls;
   }
+
+  getDoll = (index) => this.dolls[index];
 
   // TODO: 댕댕베이스 데이터 의존성 제거
   init(dolls, options) {
@@ -40,8 +65,11 @@ class Simulator extends EventEmitter {
     dispatch(updateOptions(options));
     dispatch(updateDolls(dolls));
 
+    this.removeAllListeners();
+
     // TODO
-    // this.dolls.forEach((doll) => registerEvents(doll, this));
+    Object.keys(this.dolls)
+      .forEach((key) => registerEvents(this, key));
   }
 
   start() {
@@ -49,11 +77,19 @@ class Simulator extends EventEmitter {
     for (this.currentFrame = 1; this.currentFrame <= 900; this.currentFrame++) {
     // for (this.currentFrame = 1; this.currentFrame <= 3600; this.currentFrame++) {
       this.emit('frameStart');
-      this.dolls
-        .filter((doll) => doll.hp > 0)
-        .forEach((doll) => calculate(doll, this));
-      this.emit('frameEnd');
+      Object.keys(this.dolls)
+        .filter((key) => this.dolls[key].hp > 0)
+        .forEach((key) => calculate(this, key));
+      // this.emit('frameEnd');
     }
+  }
+
+  next() {
+    this.store.dispatch(updateFrame(this.currentFrame + 1));
+    this.emit('frameStart');
+    Object.keys(this.dolls)
+      .filter((key) => this.dolls[key].hp > 0)
+      .forEach((key) => calculate(this, key));
   }
 }
 
