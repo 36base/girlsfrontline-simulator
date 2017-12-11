@@ -4,8 +4,7 @@
 import EventEmitter from 'eventemitter3';
 // import {calculate} from './calculator';
 import reducers from './redux/reducers';
-import {updateFrame, updateOptions} from './redux/simulator';
-import {updateDolls} from './redux/doll';
+import {updateFrame, updateDolls, updateOptions} from './redux/simulator';
 import {calculate, registerEvents} from './calculator';
 
 class Simulator extends EventEmitter {
@@ -33,19 +32,20 @@ class Simulator extends EventEmitter {
 
   get present() {
     const state = this.store.getState();
-    const {simulator: {present}} = state;
+    const {simulator: {simulator: {present}}} = state;
 
     return present;
   }
 
   get currentFrame() {
-    const {present: {simulator: {frame}}} = this;
+    const {present: {frame}} = this;
 
     return frame;
   }
 
   get options() {
-    const {present: {options}} = this;
+    const state = this.store.getState();
+    const {simulator: {options}} = state;
 
     return options;
   }
@@ -67,7 +67,6 @@ class Simulator extends EventEmitter {
 
     this.removeAllListeners();
 
-    // TODO
     Object.keys(this.dolls)
       .forEach((key) => registerEvents(this, key));
   }

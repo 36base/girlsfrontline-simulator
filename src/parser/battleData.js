@@ -17,6 +17,7 @@ export default function getBattleData(dollData, team) {
     activeFrame: 0,
     // 남은 탄환
     currentBullet: 0,
+    battleStats: {},
     // 특정 프레임에 호출되는 함수가 저장됩니다.
     // Ex) 3초 후 저격 등
     frameEvent: [],

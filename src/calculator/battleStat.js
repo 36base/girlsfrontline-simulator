@@ -1,4 +1,5 @@
 import getStat from '../parser/stat';
+import {updateDoll} from '../redux/simulator';
 
 export function getBattleStat(simulator, dollIndex) {
   const doll = simulator.getDoll(dollIndex);
@@ -64,7 +65,7 @@ export function getBattleStat(simulator, dollIndex) {
     }
   });
 
-  return stats;
+  simulator.dispatch(updateDoll(dollIndex, {battleStats: stats}));
 }
 
 export default getBattleStat;

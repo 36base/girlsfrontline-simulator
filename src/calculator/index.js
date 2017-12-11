@@ -6,12 +6,10 @@ import {registerSkill} from './skill';
 import {getBattleStat} from './battleStat';
 
 export function calculate(simulator, dollIndex) {
-  const battleStats = getBattleStat(simulator, dollIndex);
-  // getBattleStat(simulator, dollIndex);
-  console.log(battleStats);
+  getBattleStat(simulator, dollIndex);
 
-  // doll.currentTarget = getNormalTarget(doll, simulator);
-  //
+  // getNormalTarget(simulator, dollIndex);
+
   // if (doll.currentTarget) {
   //   // if (doll['team'] === 'friendly') {
   //   //   normalAttack(doll, simulator)

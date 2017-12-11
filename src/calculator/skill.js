@@ -1,7 +1,6 @@
-import {updateDoll} from '../redux/doll';
+import {updateDoll} from '../redux/simulator';
 // import {activeSniping} from './skills';
 // import {getNormalTarget} from './target';
-import {getBattleStat} from './battleStat';
 
 export function registerSkill(simulator, dollIndex) {
   const {dollData: {skill: {activeTime: initActiveTime}}} = simulator.getDoll(dollIndex);
@@ -32,13 +31,14 @@ export function registerSkill(simulator, dollIndex) {
   simulator.on('frameStart', () => {
     const {currentFrame} = simulator;
     const doll = simulator.getDoll(dollIndex);
-    const {dollData: {codeName, skill: skillData}, nextActiveFrame} = doll;
+    const {dollData: {codeName, skill: skillData}, nextActiveFrame, battleStats} = doll;
     const {startCoolDown, coolDown, duration} = skillData;
 
     if (nextActiveFrame && nextActiveFrame <= currentFrame) {
       // 타겟이 없으면 스킬을 발동하지 않음
-      if (doll.currentTarget) {
-        const {coolDown: coolDownMul} = getBattleStat(simulator, dollIndex);
+      // if (doll.currentTarget) {
+      if (doll) {
+        const {coolDown: coolDownMul} = battleStats;
 
         // 패시브 처리
         if (startCoolDown <= 0) {
