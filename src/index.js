@@ -85,6 +85,7 @@ class Simulator extends EventEmitter {
     Object.keys(this.dolls)
       .filter((key) => this.dolls[key].hp > 0)
       .forEach((key) => calculate(this, key));
+    this.emit('frameEnd');
   }
 }
 

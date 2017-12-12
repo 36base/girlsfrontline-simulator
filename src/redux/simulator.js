@@ -1,26 +1,29 @@
 import {createAction, handleActions, handleAction, combineActions} from 'redux-actions';
 
 export const FRAME_START = 'FRAME_START';
-const OPTIONS_INIT = 'OPTIONS_INIT';
 const DOLLS_INIT = 'DOLLS_INIT';
-const TARGET_CHANGED = 'TARGET_CHANGED';
-const BATTLESTAT_UPDATED = 'BATTLESTAT_UPDATED';
-const COOLDOWN_INIT = 'COOLDOWN_INIT';
-const SKILL_ACTIVE = 'SKILL_ACTIVE';
-const BULLET_RELOAD = 'BULLET_RELOAD';
+const OPTIONS_INIT = 'OPTIONS_INIT';
+
 const ATTACK_BASIC = 'ATTACK_BASIC';
-const DOLL_HURT = 'DOLL_HURT';
 const ATTACK_DELAY_UPDATE = 'ATTACK_DELAY_UPDATE';
+const BATTLESTAT_UPDATED = 'BATTLESTAT_UPDATED';
+const BULLET_RELOAD = 'BULLET_RELOAD';
+const COOLDOWN_INIT = 'COOLDOWN_INIT';
+const DOLL_HURT = 'DOLL_HURT';
+const DOLL_MOVE_X = 'DOLL_MOVE_X';
+const SKILL_ACTIVE = 'SKILL_ACTIVE';
+const TARGET_CHANGED = 'TARGET_CHANGED';
 
 const DOLL_ACTIONS = [
-  TARGET_CHANGED,
-  BATTLESTAT_UPDATED,
-  COOLDOWN_INIT,
-  SKILL_ACTIVE,
-  BULLET_RELOAD,
   ATTACK_BASIC,
-  DOLL_HURT,
   ATTACK_DELAY_UPDATE,
+  BATTLESTAT_UPDATED,
+  BULLET_RELOAD,
+  COOLDOWN_INIT,
+  DOLL_HURT,
+  DOLL_MOVE_X,
+  SKILL_ACTIVE,
+  TARGET_CHANGED,
 ];
 
 export const startFrame = createAction(FRAME_START, (frame) => frame);
@@ -64,10 +67,16 @@ export const execDamage = createAction(DOLL_HURT, (index, {hp, damage}) => ({
     hp: hp - damage,
   },
 }));
-export const updateAtkFrame = createAction(DOLL_HURT, (index, nextAtkFrame) => ({
+export const updateAtkFrame = createAction(ATTACK_DELAY_UPDATE, (index, nextAtkFrame) => ({
   index,
   doll: {
     nextAtkFrame,
+  },
+}));
+export const moveDollX = createAction(DOLL_MOVE_X, (index, posX) => ({
+  index,
+  doll: {
+    posX,
   },
 }));
 

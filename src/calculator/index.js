@@ -1,3 +1,4 @@
+import {moveDollX} from '../redux/simulator';
 import {initNormalTarget} from './target';
 import {normalAttack} from './attack';
 import {registerEquips} from './equips';
@@ -11,38 +12,46 @@ export function calculate(simulator, dollIndex) {
 
   initNormalTarget(simulator, dollIndex);
 
-  const {targetIndex, team} = simulator.getDoll(dollIndex);
+  const {
+    targetIndex,
+    team,
+  } = simulator.getDoll(dollIndex);
 
   if (targetIndex) {
     if (team === 'friendly') {
       normalAttack(simulator, dollIndex);
     }
-    // normalAttack(doll, simulator);
-  }
+  } else {
+    // 유효 타겟이 없으면 제대(유닛) 이동
+    simulator.once('frameEnd', () => {
+      const {
+        company,
+        posX,
+        battleStats: {speed},
+      } = simulator.getDoll(dollIndex);
 
-  // simulator.once('frameEnd', () => {
-  //   // 프레임 종료 시 유효 타겟이 없으면 제대(유닛) 이동
-  //   if (!getNormalTarget(doll, simulator)) {
-  //     const {speed} = getBattleStat(doll, simulator);
-  //     let moveSpeed = speed;
-  //
-  //     if (doll.company === 'GRIFON') {
-  //       moveSpeed = simulator.dolls
-  //         .filter((target) => target.team === doll.team)
-  //         .map((target) => getBattleStat(target, simulator).speed);
-  //
-  //       moveSpeed = Math.min(...moveSpeed);
-  //     }
-  //
-  //     moveSpeed = moveSpeed / 5 / 30;
-  //
-  //     if (doll.team === 'friendly') {
-  //       doll.posX += moveSpeed;
-  //     } else {
-  //       doll.posX -= moveSpeed;
-  //     }
-  //   }
-  // });
+      let moveSpeed = speed;
+
+      if (company === 'GRIFON') {
+        moveSpeed = Object.keys(simulator.dolls)
+          .map((key) => simulator.dolls[key])
+          .filter((target) => target.team === team)
+          .map((target) => target.battleStats.speed);
+
+        moveSpeed = Math.min(...moveSpeed);
+      }
+
+      moveSpeed = moveSpeed / 5 / 30;
+
+      if (moveSpeed > 0) {
+        if (team === 'friendly') {
+          simulator.dispatch(moveDollX(dollIndex, posX + moveSpeed));
+        } else {
+          simulator.dispatch(moveDollX(dollIndex, posX - moveSpeed));
+        }
+      }
+    });
+  }
 }
 
 export function registerEvents(simulator, dollIndex) {

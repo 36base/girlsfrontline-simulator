@@ -44,7 +44,9 @@ export function initNormalTarget(simulator, dollIndex, customGunType) {
     }
   }
 
-  simulator.dispatch(updateTarget(dollIndex, target));
+  if (target !== targetIndex) {
+    simulator.dispatch(updateTarget(dollIndex, target));
+  }
 }
 
 export function getRange(simulator, dollIndex) {
