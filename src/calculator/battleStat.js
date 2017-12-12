@@ -2,7 +2,7 @@ import deepEqual from 'deep-equal';
 import getStat from '../parser/stat';
 import {updateBattleStat} from '../redux/simulator';
 
-export function getBattleStat(simulator, dollIndex) {
+export function initBattleStat(simulator, dollIndex) {
   const doll = simulator.getDoll(dollIndex);
   const {dollData: {gunType, stats: baseStats}, battleStats} = doll;
   const stats = {...baseStats};
@@ -71,4 +71,4 @@ export function getBattleStat(simulator, dollIndex) {
   }
 }
 
-export default getBattleStat;
+export default initBattleStat;

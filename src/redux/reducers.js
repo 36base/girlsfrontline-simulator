@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
-import undoable from 'redux-undo';
-import {simulatorReducer, optionReducer} from './simulator';
+import undoable, {includeAction} from 'redux-undo';
+import {simulatorReducer, optionReducer, FRAME_START} from './simulator';
 
 const reducers = combineReducers({
-  simulator: undoable(simulatorReducer),
+  simulator: undoable(simulatorReducer, {filter: includeAction(FRAME_START)}),
   options: optionReducer,
 });
 

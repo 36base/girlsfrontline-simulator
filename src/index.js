@@ -6,6 +6,7 @@ import EventEmitter from 'eventemitter3';
 import reducers from './redux/reducers';
 import {startFrame, initDolls, initOptions} from './redux/simulator';
 import {calculate, registerEvents} from './calculator';
+import {initBattleStat} from './calculator/battleStat';
 
 class Simulator extends EventEmitter {
   constructor() {
@@ -72,8 +73,10 @@ class Simulator extends EventEmitter {
 
     this.removeAllListeners();
 
-    Object.keys(this.dolls)
-      .forEach((key) => registerEvents(this, key));
+    Object.keys(this.dolls).forEach((key) => {
+      registerEvents(this, key);
+      initBattleStat(this, key);
+    });
   }
 
   next() {

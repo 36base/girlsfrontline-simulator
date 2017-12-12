@@ -1,26 +1,25 @@
-import {getNormalTarget} from './target';
-// import {normalAttack} from './attack';
+import {initNormalTarget} from './target';
+import {normalAttack} from './attack';
 import {registerEquips} from './equips';
 import {registerEffect} from './effect';
 import {registerSkill} from './skill';
-import {getBattleStat} from './battleStat';
+import {initBattleStat} from './battleStat';
 
 export function calculate(simulator, dollIndex) {
-  getBattleStat(simulator, dollIndex);
+  // TODO: 타겟팅 스킬 사용 후 타겟 변경 대응
+  initBattleStat(simulator, dollIndex);
 
-  getNormalTarget(simulator, dollIndex);
+  initNormalTarget(simulator, dollIndex);
 
-  // if (doll.currentTarget) {
-  //   // if (doll['team'] === 'friendly') {
-  //   //   normalAttack(doll, simulator)
-  //   // }
-  //   normalAttack(doll, simulator);
-  // }
-  //
-  // // 그래프에서는 1 ~ 900프레임까지 900개의 데이터를 요구하기 때문에
-  // // 0 데미지를 준 것으로 기록해서 데이터를 갱신하기 위함임
-  // simulator.emit('onDamage', doll, 0, simulator.currentFrame, 0);
-  //
+  const {targetIndex, team} = simulator.getDoll(dollIndex);
+
+  if (targetIndex) {
+    if (team === 'friendly') {
+      normalAttack(simulator, dollIndex);
+    }
+    // normalAttack(doll, simulator);
+  }
+
   // simulator.once('frameEnd', () => {
   //   // 프레임 종료 시 유효 타겟이 없으면 제대(유닛) 이동
   //   if (!getNormalTarget(doll, simulator)) {

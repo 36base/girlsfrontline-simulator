@@ -1,6 +1,6 @@
 import {updateTarget} from '../redux/simulator';
 
-export function getNormalTarget(simulator, dollIndex, customGunType) {
+export function initNormalTarget(simulator, dollIndex, customGunType) {
   const doll = simulator.getDoll(dollIndex);
   const {dolls} = simulator;
   const {targetIndex, dollData, company} = doll;
@@ -15,6 +15,8 @@ export function getNormalTarget(simulator, dollIndex, customGunType) {
   ) {
     return;
   }
+
+  let target = 0;
 
   // 철혈 인형일 경우 타겟팅 범위는 사거리 - 1이 됨.
   const targetRange = company === 'SANGVIS FERRI'
@@ -32,15 +34,17 @@ export function getNormalTarget(simulator, dollIndex, customGunType) {
   if (enemies.length > 0) {
     // 철혈 소속이거나 AR일 때 가장 가까운 적
     if (company === 'SANGVIS FERRI' || gunType === 2) {
-      simulator.dispatch(updateTarget(dollIndex, {targetIndex: enemies[0]}));
+      target = enemies[0];
     // RF일 때 가장 먼 적
     } else if (gunType === 3) {
-      simulator.dispatch(updateTarget(dollIndex, {targetIndex: enemies[enemies.length - 1]}));
+      target = enemies[enemies.length - 1];
     } else {
       // 기타 다른 인형일 경우 랜덤 타겟
-      simulator.dispatch(updateTarget(dollIndex, {targetIndex: enemies[Math.floor(Math.random() * enemies.length)]}));
+      target = enemies[Math.floor(Math.random() * enemies.length)];
     }
   }
+
+  simulator.dispatch(updateTarget(dollIndex, target));
 }
 
 export function getRange(simulator, dollIndex) {

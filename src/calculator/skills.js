@@ -1,27 +1,25 @@
 /* eslint-disable import/prefer-default-export */
+import {updateAtkFrame} from '../redux/simulator';
 import {getAtkInterval, makeDamage} from './attack';
-import {getBattleStat} from './battleStat';
 
-export function activeSniping(doll, target, simulator, delay) {
-  const {frameEvent, dollData} = doll;
-  const {skill: skillData} = dollData;
+export function activeSniping(simulator, dollIndex, {delay}) {
+  const {frameEvent, dollData: {skill: {dataPool}}} = simulator.getDoll(dollIndex);
 
   // 조준 시간동안 공격 억제
-  doll.nextAtkFrame = 9999999;
+  simulator.dispatch(updateAtkFrame(dollIndex, 999999));
 
   const frameDelay = Math.round(delay * 30);
   frameEvent.push({
     frame: simulator.currentFrame + frameDelay,
     callback() {
-      const stats = getBattleStat(doll, simulator);
-      const {pow, rate} = stats;
-      const {dataPool} = skillData;
+      const {battleStats: {pow, rate}, currentDummy, targetIndex} = simulator.getDoll(dollIndex);
 
-      const skillDmg = Math.floor((pow * (dataPool[0] / 100)) * doll.currentDummy);
+      const skillDmg = Math.floor((pow * (dataPool[0] / 100)) * currentDummy);
 
-      doll.nextAtkFrame = simulator.currentFrame + getAtkInterval(doll, rate);
+      const atkFrame = simulator.currentFrame + getAtkInterval(simulator, dollIndex, {rate});
+      simulator.dispatch(updateAtkFrame(dollIndex, atkFrame));
 
-      makeDamage(simulator, doll, target, skillDmg);
+      makeDamage(simulator, {attacker: dollIndex, victim: targetIndex, damage: skillDmg});
     },
   });
 }

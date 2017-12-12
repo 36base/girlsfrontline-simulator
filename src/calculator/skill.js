@@ -1,6 +1,6 @@
 import {initCoolDown, updateSkill} from '../redux/simulator';
-// import {activeSniping} from './skills';
-// import {getNormalTarget} from './target';
+import {activeSniping} from './skills';
+import {initNormalTarget} from './target';
 
 export function registerSkill(simulator, dollIndex) {
   const {dollData: {skill: {activeTime: initActiveTime}}} = simulator.getDoll(dollIndex);
@@ -28,14 +28,24 @@ export function registerSkill(simulator, dollIndex) {
 
   simulator.on('frameStart', () => {
     const {currentFrame} = simulator;
-    const doll = simulator.getDoll(dollIndex);
-    const {dollData: {codeName, skill: skillData}, nextActiveFrame, battleStats} = doll;
-    const {startCoolDown, coolDown, duration} = skillData;
+    const {
+      dollData: {
+        codeName,
+        skill: {
+          startCoolDown,
+          coolDown,
+          duration,
+          actionId,
+        },
+      },
+      nextActiveFrame,
+      battleStats,
+      targetIndex,
+    } = simulator.getDoll(dollIndex);
 
     if (nextActiveFrame && nextActiveFrame <= currentFrame) {
       // 타겟이 없으면 스킬을 발동하지 않음
-      // if (doll.currentTarget) {
-      if (doll) {
+      if (targetIndex) {
         const {coolDown: coolDownMul} = battleStats;
 
         // 패시브 처리
@@ -55,7 +65,7 @@ export function registerSkill(simulator, dollIndex) {
         const coolTime = (coolDown / 30).toFixed(1);
         console.log(`${currentFrame}프레임, ${codeName} 스킬 발동! 지속시간 ${durTime}초, 쿨타임 ${coolTime}초`);
 
-        activeSkill(doll, simulator, skillData.actionId);
+        activeSkill(simulator, dollIndex, actionId);
       }
     }
   });
@@ -106,15 +116,16 @@ export function registerSkill(simulator, dollIndex) {
   });
 }
 
-function activeSkill(doll, simulator, activeId) {
+function activeSkill(simulator, dollIndex, activeId) {
   switch (activeId) {
     // NTW-20 & M99
     case 202:
     case 203: {
       // 가장 먼 적을 타겟으로(RF 타겟팅 적용)
-      // const target = getNormalTarget(doll, simulator, 3);
-      // // doll, simulator, filter, delay
-      // activeSniping(doll, target, simulator, 2.0);
+      initNormalTarget(simulator, dollIndex, 3);
+      activeSniping(simulator, dollIndex, {
+        delay: 2.0,
+      });
       break;
     }
     case 204:

@@ -1,32 +1,24 @@
-import {getBattleStat} from './battleStat';
+import {reloadBullet, basicAttack, execDamage} from '../redux/simulator';
 
-export function getAtkInterval(doll, rate, bullet) {
-  const {dollData} = doll;
+export function getAtkInterval(simulator, dollIndex, {rate, bullet}) {
+  const {dollData: {gunType}, currentBullet} = simulator.getDoll(dollIndex);
   const realRate = rate > 108 ? 108 : rate;
 
-  if (doll.nextAtkFrame === 0) {
-    doll.currentBullet = bullet;
-  }
-
   if (bullet > 0) {
-    if (doll.currentBullet <= 0) {
-      doll.currentBullet = bullet;
-      return getReloadInterval(doll, rate, bullet);
+    if (currentBullet <= 0) {
+      simulator.dispatch(reloadBullet(bullet));
+      return getReloadInterval(gunType, rate, bullet);
     }
-
-    doll.currentBullet--;
   }
 
-  // MG일 경우 초당 3발(10프레임)으로 설정
-  return dollData.gunType === 5
+  // MG일 경우 초당 약 3발(10 frame)으로 설정
+  return gunType === 5
     ? 10
     : Math.ceil(50 / realRate / 0.03333334);
 }
 
-function getReloadInterval(doll, rate, bullet) {
-  const {dollData} = doll;
-
-  switch (dollData.gunType) {
+function getReloadInterval(gunType, rate, bullet) {
+  switch (gunType) {
     // MG
     case 5:
       return (3 + (200 / rate)) * 30;
@@ -38,16 +30,14 @@ function getReloadInterval(doll, rate, bullet) {
   }
 }
 
-export function normalAttack(doll, simulator) {
+export function normalAttack(simulator, dollIndex) {
+  const {nextAtkFrame, targetIndex, currentDummy, currentBullet, battleStats: stats} = simulator.getDoll(dollIndex);
+  const {battleStats: targetStats} = simulator.getDoll(targetIndex);
   const {currentFrame, options} = simulator;
   const {realMode} = options;
 
   // 공격 주기 체크
-  if (doll.nextAtkFrame === 0 || doll.nextAtkFrame <= currentFrame) {
-    const {currentTarget: target, currentDummy} = doll;
-    const stats = getBattleStat(doll, simulator);
-    const targetStats = getBattleStat(target, simulator);
-
+  if (nextAtkFrame === 0 || nextAtkFrame <= currentFrame) {
     // 공격자 스탯
     const {pow, hit, crit, rate, bullet, critDmg, armorPiercing} = stats;
     // 피격자 스탯
@@ -100,39 +90,39 @@ export function normalAttack(doll, simulator) {
       frameDmg = dummyDmg;
     } else {
       // 데미지 * 명중 기대값 * 더미
-      frameDmg *= frameHit * currentDummy;
+      frameDmg = frameDmg * frameHit * currentDummy;
     }
 
     frameDmg = Math.floor(frameDmg);
 
-    makeDamage(simulator, doll, target, frameDmg);
+    const atkInterval = currentFrame + getAtkInterval(simulator, dollIndex, {rate, bullet});
+    simulator.dispatch(basicAttack(dollIndex, {nextAtkFrame: atkInterval, currentBullet}));
 
-    doll.nextAtkFrame = currentFrame + getAtkInterval(doll, rate, bullet);
+    makeDamage(simulator, {
+      attacker: dollIndex,
+      victim: targetIndex,
+      damage: frameDmg,
+    });
   }
 }
 
-export function makeDamage(simulator, doll, target, damage, linkProtection = true) {
+export function makeDamage(simulator, {attacker, victim, damage, linkProtection = true}) {
   const {currentFrame: frame} = simulator;
-  const {dollData} = doll;
-  const {dollData: targetData} = target;
+  const {dollData: {codeName: attackerName}} = simulator.getDoll(attacker);
+  const {dollData: {codeName: targetName, stats: {targetBaseHP}}, hp: targetHP} = simulator.getDoll(victim);
 
   let finalDamage = damage;
 
-  simulator.emit('onDamage', doll, target, frame, finalDamage);
-
-  if (damage > 0) {
-    if (linkProtection && finalDamage > targetData.stats.hp) {
-      finalDamage = targetData.stats.hp;
-    }
-
-    target.hp -= finalDamage;
-    console.log(`${frame}프레임, 캐릭터 ${dollData.codeName}가 타겟 ${targetData.codeName}을(를) 공격하여 ${finalDamage}데미지를 입힘 (남은 체력: ${target.hp})`);
-
-    // 오버딜 구현
-    if (target.hp < 0) {
-      finalDamage += target.hp;
-    }
-  } else {
-    console.log(`${frame}프레임, 캐릭터 ${dollData.codeName}가 타겟 ${targetData.codeName}을(를) 공격했으나 빗나갔습니다! (남은 체력: ${target.hp})`);
+  if (finalDamage > targetHP) {
+    finalDamage = targetHP;
   }
+
+  if (linkProtection && finalDamage > targetBaseHP) {
+    finalDamage = targetBaseHP;
+  }
+
+  simulator.emit('onDamage', attacker, victim, finalDamage);
+  simulator.dispatch(execDamage(victim, {hp: targetHP, damage: finalDamage}));
+
+  console.log(`${frame}프레임, 캐릭터 ${attackerName}가 타겟 ${targetName}을(를) 공격하여 ${finalDamage}데미지를 입힘 (남은 체력: ${targetHP - finalDamage})`);
 }
