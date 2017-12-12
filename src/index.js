@@ -25,6 +25,7 @@ class Simulator extends EventEmitter {
 
     this.reducers = reducers;
     this.store = {};
+    this._dollData = {};
   }
 
   dispatch = (action) => {
@@ -59,12 +60,22 @@ class Simulator extends EventEmitter {
 
   getDoll = (index) => this.dolls[index];
 
+  getDollData = (index) => this._dollData[index];
+
   // TODO: 댕댕베이스 데이터 의존성 제거
   init(dolls, options) {
     // index must not be '0' because targetIndex defaults to 0.
     if (Object.keys(dolls).some((index) => index === '0')) {
       throw new Error('Index must not be \'0\'');
     }
+
+    // dollData는 별도로 저장
+    this._dollData = {};
+    Object.keys(dolls).forEach((key) => {
+      this._dollData[key] = {...dolls[key].dollData};
+
+      delete dolls[key].dollData;
+    });
 
     const {store: {dispatch}} = this;
 

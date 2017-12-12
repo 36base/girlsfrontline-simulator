@@ -1,11 +1,13 @@
 import {updateTarget} from '../redux/simulator';
 
 export function initNormalTarget(simulator, dollIndex, customGunType) {
+  // TODO: getDistance 함수 분리
   const doll = simulator.getDoll(dollIndex);
+  const {gunType: baseGunType} = simulator.getDollData(dollIndex);
   const {dolls} = simulator;
-  const {targetIndex, dollData, company} = doll;
+  const {targetIndex, company} = doll;
   const currentTarget = simulator.getDoll(targetIndex);
-  const gunType = customGunType || dollData.gunType;
+  const gunType = customGunType || baseGunType;
 
   const range = getRange(simulator, dollIndex);
 
@@ -51,23 +53,23 @@ export function initNormalTarget(simulator, dollIndex, customGunType) {
 
 export function getRange(simulator, dollIndex) {
   const {dolls} = simulator;
-  const {dollData, company, team} = simulator.getDoll(dollIndex);
+  const {company, team, battleStats: {range: baseRange}} = simulator.getDoll(dollIndex);
+  const {posX} = simulator.getDollData(dollIndex);
 
   if (company === 'GRIFON') {
     const friendly = Object.keys(dolls)
-      .filter((key) => dolls[key].team === team)
-      .map((key) => dolls[key]);
+      .filter((key) => dolls[key].team === team);
 
     // 1열에 있으면 -(-2) + 7 = 9
     // 2열에 있으면 -(0) + 7 = 7
-    const range = -dollData.posX + 7;
+    const range = -posX + 7;
 
     // 아군이 3열에 존재하면 추가 사거리 +2
-    return friendly.some((item) => item.dollData.posX > 1)
+    return friendly.some((key) => simulator.getDollData(key).posX > 1)
       ? range + 2
       : range;
   } else if (company === 'SANGVIS FERRI') {
-    return dollData.stats.range;
+    return baseRange;
   }
 
   return 0;

@@ -1,16 +1,16 @@
 export function registerEffect(simulator, dollIndex) {
-  simulator.on('statCalculate', (target, addStats) => {
-    const {dollData: {gridPos, gunType, dummyLink, effect}} = simulator.getDoll(dollIndex);
+  simulator.on('statCalculate', (targetIndex, addStats) => {
+    const {gridPos, gunType, dummyLink, effect} = simulator.getDollData(dollIndex);
     const {effectType, effectCenter, effectPos, gridEffect} = effect;
-    const {dollData: targetData} = target;
+    const {gridPos: targetGridPos, gunType: targetGunType} = simulator.getDollData(targetIndex);
 
     const posContrast = effectCenter === 0 ? 0 : effectCenter - 13;
     const posCompensate = effectCenter - gridPos;
 
     // 버프 적용 칸에 들어와 있을 때
-    if (effectPos.some((pos) => (pos - posCompensate + posContrast) === targetData.gridPos)) {
+    if (effectPos.some((pos) => (pos - posCompensate + posContrast) === targetGridPos)) {
       // 버프 적용 대상인지 확인
-      if (effectType === 0 || targetData.gunType === effectType) {
+      if (effectType === 0 || targetGunType === effectType) {
         gridEffect.forEach((elem) => {
           const {type, value} = elem;
 

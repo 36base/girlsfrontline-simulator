@@ -3,7 +3,8 @@ import {updateAtkFrame} from '../redux/simulator';
 import {getAtkInterval, makeDamage} from './attack';
 
 export function activeSniping(simulator, dollIndex, {delay}) {
-  const {frameEvent, dollData: {skill: {dataPool}}} = simulator.getDoll(dollIndex);
+  const {frameEvent} = simulator.getDoll(dollIndex);
+  const {skill: {dataPool}} = simulator.getDollData(dollIndex);
 
   // 조준 시간동안 공격 억제
   simulator.dispatch(updateAtkFrame(dollIndex, 999999));

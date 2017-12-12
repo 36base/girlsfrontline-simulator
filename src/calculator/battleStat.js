@@ -4,7 +4,8 @@ import {updateBattleStat} from '../redux/simulator';
 
 export function initBattleStat(simulator, dollIndex) {
   const doll = simulator.getDoll(dollIndex);
-  const {dollData: {gunType, stats: baseStats}, battleStats} = doll;
+  const {gunType, stats: baseStats} = simulator.getDollData(dollIndex);
+  const {battleStats} = doll;
   const stats = {...baseStats};
 
   // stat파서에 인수를 넣지 않으면 기본값(0)으로 반환됨
@@ -23,10 +24,10 @@ export function initBattleStat(simulator, dollIndex) {
   /**
   * 스탯을 연산 할 때 호출됩니다.
   * @event Simulator#statCalculate
-  * @prop {Object} doll 스탯을 계산할 인형 오브젝트
+  * @prop {Object} dollIndex 스탯을 계산할 인형 index
   * @prop {Object} addStats 해당 인형의 스탯 증가량
   */
-  simulator.emit('statCalculate', doll, addStats);
+  simulator.emit('statCalculate', dollIndex, addStats);
 
   Object.keys(stats).forEach((keys) => {
     if (keys === 'coolDown') {

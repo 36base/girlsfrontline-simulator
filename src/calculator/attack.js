@@ -1,7 +1,8 @@
 import {reloadBullet, basicAttack, execDamage} from '../redux/simulator';
 
 export function getAtkInterval(simulator, dollIndex, {rate, bullet}) {
-  const {dollData: {gunType}, currentBullet} = simulator.getDoll(dollIndex);
+  const {currentBullet} = simulator.getDoll(dollIndex);
+  const {gunType} = simulator.getDollData(dollIndex);
   const realRate = rate > 108 ? 108 : rate;
 
   if (bullet > 0) {
@@ -108,8 +109,9 @@ export function normalAttack(simulator, dollIndex) {
 
 export function makeDamage(simulator, {attacker, victim, damage, linkProtection = true}) {
   const {currentFrame: frame} = simulator;
-  const {dollData: {codeName: attackerName}} = simulator.getDoll(attacker);
-  const {dollData: {codeName: targetName, stats: {targetBaseHP}}, hp: targetHP} = simulator.getDoll(victim);
+  const {codeName: attackerName} = simulator.getDollData(attacker);
+  const {hp: targetHP} = simulator.getDoll(victim);
+  const {codeName: targetName, stats: {targetBaseHP}} = simulator.getDollData(victim);
 
   let finalDamage = damage;
 

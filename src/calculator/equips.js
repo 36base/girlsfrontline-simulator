@@ -1,9 +1,8 @@
 export function registerEquips(simulator, dollIndex) {
-  simulator.on('statCalculate', (target, addStats) => {
-    const doll = simulator.getDoll(dollIndex);
-    const {dollData: {equips}} = doll;
+  simulator.on('statCalculate', (targetIndex, addStats) => {
+    if (targetIndex === dollIndex) {
+      const {equips} = simulator.getDollData(dollIndex);
 
-    if (target === doll) {
       equips.forEach((equip) => {
         const {stats} = equip;
 

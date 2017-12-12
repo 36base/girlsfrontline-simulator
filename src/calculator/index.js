@@ -55,7 +55,7 @@ export function calculate(simulator, dollIndex) {
 }
 
 export function registerEvents(simulator, dollIndex) {
-  const {dollData: {effect, equips, skill}} = simulator.getDoll(dollIndex);
+  const {effect, equips, skill} = simulator.getDollData(dollIndex);
 
   if (effect) {
     registerEffect(simulator, dollIndex);

@@ -3,17 +3,16 @@ import {activeSniping} from './skills';
 import {initNormalTarget} from './target';
 
 export function registerSkill(simulator, dollIndex) {
-  const {dollData: {skill: {activeTime: initActiveTime}}} = simulator.getDoll(dollIndex);
+  const {skill: {activeTime: initActiveTime}} = simulator.getDollData(dollIndex);
 
   simulator.dispatch(initCoolDown(dollIndex, initActiveTime));
 
   // frameEvent에 등록된 액티브 스킬 처리
   simulator.on('frameStart', () => {
     const {currentFrame} = simulator;
-    const doll = simulator.getDoll(dollIndex);
+    const {hp, frameEvent} = simulator.getDoll(dollIndex);
 
-    if (doll.hp > 0) {
-      const {frameEvent} = doll;
+    if (hp > 0) {
       if (frameEvent.length > 0) {
         frameEvent.forEach((event) => {
           const {frame: eventFrame, callback} = event;
@@ -28,20 +27,11 @@ export function registerSkill(simulator, dollIndex) {
 
   simulator.on('frameStart', () => {
     const {currentFrame} = simulator;
+    const {nextActiveFrame, battleStats, targetIndex} = simulator.getDoll(dollIndex);
     const {
-      dollData: {
-        codeName,
-        skill: {
-          startCoolDown,
-          coolDown,
-          duration,
-          actionId,
-        },
-      },
-      nextActiveFrame,
-      battleStats,
-      targetIndex,
-    } = simulator.getDoll(dollIndex);
+      codeName,
+      skill: {startCoolDown, coolDown, duration, actionId},
+    } = simulator.getDollData(dollIndex);
 
     if (nextActiveFrame && nextActiveFrame <= currentFrame) {
       // 타겟이 없으면 스킬을 발동하지 않음
@@ -70,10 +60,11 @@ export function registerSkill(simulator, dollIndex) {
     }
   });
 
-  simulator.on('statCalculate', (target, addStats) => {
+  simulator.on('statCalculate', (targetIndex, addStats) => {
     const {currentFrame} = simulator;
-    const doll = simulator.getDoll(dollIndex);
-    const {dollData: {skill: skillData}, activeFrame} = doll;
+    const {activeFrame, team} = simulator.getDoll(dollIndex);
+    const {skill: skillData} = simulator.getDollData(dollIndex);
+    const {team: targetTeam} = simulator.getDoll(targetIndex);
     const {nightDataPool, dataPool, buffTarget, buffSelf} = skillData;
 
     if (currentFrame < activeFrame) {
@@ -94,7 +85,7 @@ export function registerSkill(simulator, dollIndex) {
           const buffType = getBuffType(buff.type);
           const buffValue = buffData[buffIndex] / 100;
 
-          if ((buffTeam && target.team === doll.team) || (!buffTeam && target.team !== doll.team)) {
+          if ((buffTeam && targetTeam === team) || (!buffTeam && targetTeam !== team)) {
             addStats.skillMul[buffType] *= buffValue;
           }
 
@@ -102,7 +93,7 @@ export function registerSkill(simulator, dollIndex) {
         });
       }
 
-      if (target === doll && buffSelf) {
+      if (targetIndex === dollIndex && buffSelf) {
         buffSelf.forEach((buff) => {
           const buffType = getBuffType(buff.type);
           const buffValue = buffData[buffIndex] / 100;
