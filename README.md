@@ -6,6 +6,8 @@
 
 > 소녀전선 전투 시뮬레이터 라이브러리
 
+시뮬레이터 상태(state)를 Redux와 결합한 버전은 [feature/redux](https://github.com/CirnoV/girlsfrontline-simulator/tree/feature/redux) Brunch에서 볼 수 있습니다. 기능은 완성되었으나 API 문서 수정이 되지 않았으므로 주의해주세요.
+
 현재 개발이 중단된 상태이며, 대신 Pixi.js 기반 [웹 시뮬레이터](https://github.com/CirnoV/RFB)를 제작 중에 있습니다.
 
 ## Feature
