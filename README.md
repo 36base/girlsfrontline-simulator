@@ -47,7 +47,7 @@ $ yarn test
 ```
 
 ## License
-[CC-BY-NC-SA](./LICENSE)
+[MIT](./LICENSE)
 
 ## API
 [API 문서](./src/api.md)
