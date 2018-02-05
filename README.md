@@ -4,9 +4,9 @@
 [![Build Status](https://travis-ci.org/DDBase/girlsfrontline-simulator.svg?branch=master)](https://travis-ci.org/DDBase/girlsfrontline-simulator)
 [![Dependency Status](https://dependencyci.com/github/DDBase/girlsfrontline-simulator/badge)](https://dependencyci.com/github/DDBase/girlsfrontline-simulator)
 
-> 소녀전선 전투 시뮬레이터
+> 소녀전선 전투 시뮬레이터 라이브러리
 
-[댕댕베이스](http://ddb.kirsi.moe/)에서 개발중인 전투 시뮬레이터 입니다.
+현재 개발이 중단된 상태이며, 대신 Pixi.js 기반 [웹 시뮬레이터](https://github.com/CirnoV/RFB)를 제작 중에 있습니다.
 
 ## Feature
 * 인형 데이터 파싱
@@ -47,7 +47,7 @@ $ yarn test
 ```
 
 ## License
-[CC-BY-NC-SA](./LICENSE)
+[MIT](./LICENSE)
 
 ## API
 [API 문서](./src/api.md)

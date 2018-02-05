@@ -4,8 +4,8 @@
   "main": "./dist/index.js",
   "repository": "https://github.com/CirnoV/girlsfrontline-simulator.git",
   "description": "GirlsFrontline Combat Simulator API",
-  "author": "DDBase Community",
-  "license": "CC-BY-NC-SA-4.0",
+  "author": "CirnoV",
+  "license": "MIT",
   "dependencies": {
     "deep-equal": "^1.0.1",
     "eventemitter3": "^2.0.3",
