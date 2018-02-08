@@ -1,12 +1,13 @@
 # girlsfrontline-simulator
 
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Build Status](https://travis-ci.org/DDBase/girlsfrontline-simulator.svg?branch=master)](https://travis-ci.org/DDBase/girlsfrontline-simulator)
 [![Dependency Status](https://dependencyci.com/github/DDBase/girlsfrontline-simulator/badge)](https://dependencyci.com/github/DDBase/girlsfrontline-simulator)
 
 > 소녀전선 전투 시뮬레이터 라이브러리
 
-현재 개발이 중단된 상태이며, 대신 Pixi.js 기반 [웹 시뮬레이터](https://github.com/CirnoV/RFB)를 제작 중에 있습니다.
+시뮬레이터 상태(state)를 Redux와 결합한 버전은 [feature/redux](https://github.com/CirnoV/girlsfrontline-simulator/tree/feature/redux)에서 볼 수 있습니다.
+
+현재 개발이 중단되었습니다.
 
 ## Feature
 * 인형 데이터 파싱
