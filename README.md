@@ -27,6 +27,10 @@ $ git clone https://github.com/CirnoV/girlsfrontline-simulator.git
 $ cd girlsfrontline-simulator
 $ yarn
 ```
+via npm
+```bash
+$ yarn add girlsfrontline-simulator
+```
 
 ## Usage
 코드 테스트
