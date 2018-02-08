@@ -1,6 +1,6 @@
 {
   "name": "girlsfrontline-simulator",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "main": "./dist/index.js",
   "repository": "https://github.com/CirnoV/girlsfrontline-simulator.git",
   "description": "GirlsFrontline Combat Simulator API",
